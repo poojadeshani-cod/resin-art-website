@@ -1,0 +1,75 @@
+<%- include('../partials/admin-header', { title: product ? 'Edit Product' : 'Add Product' }) %>
+
+<h3><%= product ? 'Edit Product' : 'Add Product' %></h3>
+
+<form
+  method="POST"
+  enctype="multipart/form-data"
+  action="<%= product ? '/admin/products/edit/' + product._id : '/admin/products' %>"
+>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label">Name</label>
+        <input
+          type="text"
+          name="name"
+          class="form-control"
+          required
+          value="<%= product ? product.name : '' %>"
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select name="categorySlug" class="form-select" required>
+          <option value="">Select category</option>
+          <% fixedCategories.forEach(function (cat) { %>
+            <option
+              value="<%= cat.slug %>"
+              <%= product && product.categorySlug === cat.slug ? 'selected' : '' %>
+            >
+              <%= cat.label %>
+            </option>
+          <% }) %>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Price (₹)</label>
+        <input
+          type="number"
+          step="0.01"
+          min="0"
+          name="price"
+          class="form-control"
+          required
+          value="<%= product ? product.price : '' %>"
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description (optional)</label>
+        <textarea name="description" class="form-control" rows="4"><%= product ? product.description : '' %></textarea>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Image</label>
+        <input type="file" name="image" class="form-control">
+        <% if (product && product.imageUrl) { %>
+          <div class="mt-2">
+            <p class="small text-muted mb-1">Current image:</p>
+            <img src="<%= product.imageUrl %>" alt="<%= product.name %>" class="img-fluid rounded border">
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a href="/admin/products" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('../partials/admin-footer') %>

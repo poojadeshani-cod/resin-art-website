@@ -1,0 +1,48 @@
+<%- include('../partials/admin-header', { title: 'Dashboard' }) %>
+
+<div class="row g-4">
+  <div class="col-md-5">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <h5 class="card-title mb-3">About shreyadeshani.art</h5>
+        <p class="small text-muted">
+          Handmade resin creations that preserve memories and elevate spaces.
+          Use this admin panel to manage products (shop categories) and workshops separately.
+        </p>
+        <p class="small mb-0">
+          Products: <strong><%= productCount %></strong>
+          · Workshops: <strong><%= workshopCount %></strong>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-7">
+    <h5 class="mb-3">Products per category</h5>
+    <div class="row g-3">
+      <% fixedCategories.forEach(cat => { %>
+        <div class="col-6 col-md-3">
+          <div class="card shadow-sm border-0 h-100">
+            <div class="card-body text-center">
+              <h6 class="card-title mb-1"><%= cat.label %></h6>
+              <p class="display-6 mb-0">
+                <%= perCategory[cat.slug] || 0 %>
+              </p>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+      <a href="/admin/products" class="btn btn-sm btn-outline-secondary">
+        View all products
+      </a>
+      <a href="/admin/workshops" class="btn btn-sm btn-outline-secondary">
+        Manage workshops
+      </a>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/admin-footer') %>

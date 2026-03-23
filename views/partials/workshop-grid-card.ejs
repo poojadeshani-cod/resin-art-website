@@ -1,0 +1,49 @@
+<% 
+  const excerpt = (w.description || '').replace(/\s+/g, ' ').trim();
+  const excerptShort = excerpt.length > 140 ? excerpt.substring(0, 140).trim() + '…' : excerpt;
+  let isNew = false;
+  if (w.createdAt) {
+    isNew = Date.now() - new Date(w.createdAt).getTime() < 14 * 24 * 60 * 60 * 1000;
+  }
+  const idx = typeof index === 'number' ? index : 0;
+  const showPopular = idx === 1 && !isNew;
+  const wa = typeof whatsappUrl !== 'undefined' ? whatsappUrl : '';
+
+  const dateObj = w.date ? new Date(w.date) : null;
+  const dateText =
+    dateObj && !isNaN(dateObj.getTime())
+      ? dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+      : (w.date || '');
+  const whenText = w.time ? `${dateText} · ${w.time}` : dateText;
+%>
+<div class="col-12 col-lg-4">
+  <article class="card h-100 border-0 workshop-grid-card">
+    <div class="workshop-grid-card__media">
+      <% if (w.imageUrl) { %>
+        <img src="<%= w.imageUrl %>" class="workshop-grid-card__img" alt="<%= w.title %>">
+      <% } else { %>
+        <div class="workshop-grid-card__placeholder">No image</div>
+      <% } %>
+      <% if (isNew) { %>
+        <span class="workshop-grid-card__pill workshop-grid-card__pill--new">New</span>
+      <% } else if (showPopular) { %>
+        <span class="workshop-grid-card__pill workshop-grid-card__pill--popular">Popular</span>
+      <% } %>
+      <span class="workshop-grid-card__price-badge">₹<%= Number(w.price).toFixed(0) %></span>
+    </div>
+    <div class="card-body workshop-grid-card__body d-flex flex-column">
+      <h3 class="workshop-grid-card__title h6 mb-2"><%= w.title %></h3>
+      <p class="workshop-grid-card__date small text-muted mb-2"><%= whenText %></p>
+      <p class="workshop-grid-card__excerpt small text-muted mb-3 flex-grow-1"><%= excerptShort %></p>
+      <p class="workshop-grid-card__price fw-bold mb-3">₹<%= Number(w.price).toFixed(2) %></p>
+      <% if (wa) { %>
+        <a href="<%= wa %>" target="_blank" rel="noopener noreferrer" class="btn workshop-grid-card__btn w-100 mt-auto">
+          Book Now
+        </a>
+      <% } else { %>
+        <button type="button" class="btn btn-outline-secondary w-100 rounded-pill" disabled>Book Now</button>
+      <% } %>
+      <a href="/workshops/<%= w._id %>" class="workshop-grid-card__details-link small text-center mt-2">View details</a>
+    </div>
+  </article>
+</div>

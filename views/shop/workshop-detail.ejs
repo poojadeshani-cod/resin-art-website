@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= workshop.title %> – Workshops – shreyadeshani.art</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="shop-body">
+  <header class="top-nav border-bottom">
+    <div class="container d-flex justify-content-between align-items-center py-3">
+      <a href="/" class="nav-link-main back-home-link">Home</a>
+      <nav class="d-flex flex-wrap align-items-center gap-3">
+        <div class="dropdown">
+          <button class="btn nav-link-main nav-dropdown-toggle menu-toggle-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu">
+            ☰
+          </button>
+          <ul class="dropdown-menu nav-dropdown-menu">
+            <li><a class="dropdown-item" href="/category/resin-jewelry">Resin Jewellery</a></li>
+            <li><a class="dropdown-item" href="/category/resin-preservation">Resin Preservation</a></li>
+            <li><a class="dropdown-item" href="/category/interior">Interior</a></li>
+            <li><a class="dropdown-item" href="/category/scented-candles">Scented Candles</a></li>
+            <li><a class="dropdown-item active" href="/workshops">Workshops</a></li>
+          </ul>
+        </div>
+        <a href="/cart" class="cart-link d-flex align-items-center gap-2" aria-label="Cart">
+          <span class="cart-icon" aria-hidden="true">🛒</span>
+          <span class="badge bg-dark" id="cart-count-badge">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="brand-section text-center mt-4">
+    <div class="container">
+      <h1 class="brand-name">shreyadeshani.art</h1>
+      <p class="brand-tagline">NATURE INSPIRED</p>
+    </div>
+  </section>
+
+  <main class="py-4 py-md-5 workshops-page-main">
+    <div class="container">
+      <p class="text-center mb-3">
+        <a href="/workshops" class="text-muted small text-decoration-none">← All workshops</a>
+        <span class="text-muted mx-2">·</span>
+        <a href="/" class="text-muted small text-decoration-none">Home</a>
+      </p>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+          <div class="card border-0 shadow-sm workshop-detail-page-card overflow-hidden">
+            <% if (workshop.imageUrl) { %>
+              <img src="<%= workshop.imageUrl %>" class="w-100" alt="<%= workshop.title %>" style="max-height: 420px; object-fit: cover;">
+            <% } %>
+            <div class="card-body p-4 p-md-5">
+              <h2 class="section-title mb-2"><%= workshop.title %></h2>
+              <% 
+                const dateObj = workshop.date ? new Date(workshop.date) : null;
+                const dateText = dateObj && !isNaN(dateObj.getTime())
+                  ? dateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                  : (workshop.date || '');
+                const whenText = workshop.time ? `${dateText} · ${workshop.time}` : dateText;
+              %>
+              <p class="text-muted small mb-3"><strong>When:</strong> <%= whenText %></p>
+              <p class="fw-semibold fs-5 mb-3">₹<%= Number(workshop.price).toFixed(2) %></p>
+              <div class="workshop-detail-description text-secondary mb-4" style="white-space: pre-line; line-height: 1.7;"><%= workshop.description %></div>
+
+              <% if (whatsappBookingUrl) { %>
+                <a
+                  href="<%= whatsappBookingUrl %>"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="btn btn-dark rounded-pill px-4 py-2 workshop-detail-book-btn"
+                >
+                  Book on WhatsApp
+                </a>
+                <p class="small text-muted mt-3 mb-0">Opens WhatsApp with a pre-filled message.</p>
+              <% } else { %>
+                <div class="alert alert-warning mb-0">WhatsApp booking is not configured. Set <code>WHATSAPP_NUMBER</code> in your environment.</div>
+              <% } %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>window.WHATSAPP_NUMBER = "<%= whatsappNumber %>";</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/shop.js"></script>
+</body>
+</html>

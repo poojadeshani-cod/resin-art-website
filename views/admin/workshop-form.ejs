@@ -1,0 +1,79 @@
+<%- include('../partials/admin-header', { title: workshop ? 'Edit workshop' : 'Add workshop' }) %>
+
+<h3><%= workshop ? 'Edit workshop' : 'Add workshop' %></h3>
+
+<form
+  method="POST"
+  enctype="multipart/form-data"
+  action="<%= workshop ? '/admin/workshops/edit/' + workshop._id : '/admin/workshops' %>"
+>
+  <div class="row">
+    <div class="col-md-8">
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" required value="<%= workshop ? workshop.title : '' %>">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="5" required><%= workshop ? workshop.description : '' %></textarea>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Date</label>
+        <input
+          type="date"
+          name="date"
+          class="form-control"
+          required="<%= workshop ? '' : 'required' %>"
+          value="<%= workshop && /^\\d{4}-\\d{2}-\\d{2}$/.test(workshop.date) ? workshop.date : '' %>"
+        >
+        <div class="form-text">Used to auto-delete the workshop after it expires.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Time</label>
+        <input
+          type="time"
+          name="time"
+          class="form-control"
+          step="60"
+          required="<%= workshop ? '' : 'required' %>"
+          value="<%= workshop && /^\\d{2}:\\d{2}$/.test(workshop.time || '') ? workshop.time : '' %>"
+        >
+        <div class="form-text">Workshop will be removed when this time is reached.</div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Price (₹)</label>
+        <input
+          type="number"
+          name="price"
+          class="form-control"
+          step="0.01"
+          min="0"
+          required
+          value="<%= workshop ? workshop.price : '' %>"
+        >
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Image<%= workshop ? '' : ' (required)' %></label>
+        <input type="file" name="image" class="form-control" <%= workshop ? '' : 'required' %> accept="image/*">
+        <% if (workshop && workshop.imageUrl) { %>
+          <div class="mt-2">
+            <p class="small text-muted mb-1">Current image:</p>
+            <img src="<%= workshop.imageUrl %>" alt="" class="img-fluid rounded border" style="max-height:200px;">
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <button class="btn btn-primary" type="submit"><%= workshop ? 'Update' : 'Create' %></button>
+  <a href="/admin/workshops" class="btn btn-secondary">Cancel</a>
+</form>
+
+<%- include('../partials/admin-footer') %>

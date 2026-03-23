@@ -1,0 +1,58 @@
+<%- include('../partials/admin-header', { title: 'Workshops' }) %>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h3>Workshops</h3>
+  <a href="/admin/workshops/new" class="btn btn-primary btn-sm">Add workshop</a>
+</div>
+
+<p class="text-muted small mb-3">
+  Workshops are separate from product categories. Customers book via WhatsApp on the public <a href="/workshops" target="_blank">/workshops</a> page.
+</p>
+
+<% if (!workshops.length) { %>
+  <p class="text-muted">No workshops yet. <a href="/admin/workshops/new">Add your first workshop</a>.</p>
+<% } else { %>
+  <table class="table table-striped align-middle">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Title</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Price</th>
+        <th style="width:200px;">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% workshops.forEach(w => { %>
+        <tr>
+          <td>
+            <% if (w.imageUrl) { %>
+              <img src="<%= w.imageUrl %>" alt="" style="width:72px; height:72px; object-fit:cover; border-radius:8px;">
+            <% } else { %>
+              <span class="text-muted small">—</span>
+            <% } %>
+          </td>
+          <td><%= w.title %></td>
+          <td><%= w.date %></td>
+          <td><%= w.time || '—' %></td>
+          <td>₹<%= w.price.toFixed(2) %></td>
+          <td>
+            <a href="/admin/workshops/edit/<%= w._id %>" class="btn btn-sm btn-outline-secondary">Edit</a>
+            <form
+              action="/admin/workshops/<%= w._id %>"
+              method="POST"
+              class="d-inline"
+              onsubmit="return confirm('Delete this workshop?');"
+            >
+              <input type="hidden" name="_method" value="DELETE">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+<% } %>
+
+<%- include('../partials/admin-footer') %>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title><%= category.name %> – shreyadeshani.art</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="shop-body">
+  <!-- Shared navbar -->
+  <header class="top-nav border-bottom">
+    <div class="container d-flex justify-content-between align-items-center py-3">
+      <a href="/" class="nav-link-main back-home-link">Home</a>
+      <nav class="d-flex flex-wrap align-items-center gap-3">
+        <div class="dropdown">
+          <button class="btn nav-link-main nav-dropdown-toggle menu-toggle-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu">
+            ☰
+          </button>
+          <ul class="dropdown-menu nav-dropdown-menu">
+            <li><a class="dropdown-item<%= category.slug === 'resin-jewelry' ? ' active' : '' %>" href="/category/resin-jewelry">Resin Jewellery</a></li>
+            <li><a class="dropdown-item<%= category.slug === 'resin-preservation' ? ' active' : '' %>" href="/category/resin-preservation">Resin Preservation</a></li>
+            <li><a class="dropdown-item<%= category.slug === 'interior' ? ' active' : '' %>" href="/category/interior">Interior</a></li>
+            <li><a class="dropdown-item<%= category.slug === 'scented-candles' ? ' active' : '' %>" href="/category/scented-candles">Scented Candles</a></li>
+            <li><a class="dropdown-item" href="/workshops">Workshops</a></li>
+          </ul>
+        </div>
+        <a href="/cart" class="cart-link d-flex align-items-center gap-2" aria-label="Cart">
+          <span class="cart-icon" aria-hidden="true">🛒</span>
+          <span class="badge bg-dark" id="cart-count-badge">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Brand header -->
+  <section class="brand-section text-center mt-4">
+    <div class="container">
+      <h1 class="brand-name">shreyadeshani.art</h1>
+      <p class="brand-tagline">NATURE INSPIRED</p>
+    </div>
+  </section>
+
+  <!-- Category hero + products -->
+  <section class="products-section py-4">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <div>
+          <h2 class="section-title mb-1"><%= category.name %></h2>
+          <p class="small text-muted mb-0">
+            Explore handcrafted pieces in the <%= category.name %> collection.
+          </p>
+        </div>
+        <a href="/cart" class="btn btn-sm btn-outline-dark rounded-pill px-3">
+          Go to Cart
+        </a>
+      </div>
+
+      <div class="row g-4 mt-2">
+        <% if (!products.length) { %>
+          <p class="text-muted">No products in this category yet.</p>
+        <% } %>
+
+        <% products.forEach(p => { %>
+          <div class="col-md-4">
+            <div class="card h-100 shadow-sm product-card">
+              <% if (p.imageUrl) { %>
+                <a href="/product/<%= p._id %>">
+                  <img src="<%= p.imageUrl %>" class="card-img-top" alt="<%= p.name %>" style="height:260px; object-fit:cover;">
+                </a>
+              <% } %>
+              <div class="card-body d-flex flex-column">
+                <h6 class="card-title product-name">
+                  <a href="/product/<%= p._id %>" class="text-decoration-none text-reset">
+                    <%= p.name %>
+                  </a>
+                </h6>
+                <p class="card-text small text-muted flex-grow-1">
+                  <%= p.description ? (p.description.length > 80 ? p.description.substring(0,80) + '…' : p.description) : '' %>
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fw-semibold product-price">₹<%= p.price.toFixed(2) %></span>
+                  <button
+                    class="btn btn-sm btn-add-to-cart"
+                    data-product='<%- JSON.stringify({
+                      _id: p._id,
+                      name: p.name,
+                      price: p.price,
+                      imageUrl: p.imageUrl,
+                      categoryName: category.name
+                    }) %>'
+                  >
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <script>window.WHATSAPP_NUMBER = "<%= whatsappNumber %>";</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/shop.js"></script>
+</body>
+</html>

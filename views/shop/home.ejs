@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>shreyadeshani.art – Nature Inspired</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="shop-body">
+  <!-- Shared navbar -->
+  <header class="top-nav border-bottom">
+    <div class="container d-flex justify-content-between align-items-center py-3">
+      <a href="/" class="nav-link-main back-home-link">Home</a>
+      <nav class="d-flex flex-wrap align-items-center gap-3">
+        <div class="dropdown">
+          <button class="btn nav-link-main nav-dropdown-toggle menu-toggle-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Menu">
+            ☰
+          </button>
+          <ul class="dropdown-menu nav-dropdown-menu">
+            <li><a class="dropdown-item" href="/category/resin-jewelry">Resin Jewellery</a></li>
+            <li><a class="dropdown-item" href="/category/resin-preservation">Resin Preservation</a></li>
+            <li><a class="dropdown-item" href="/category/interior">Interior</a></li>
+            <li><a class="dropdown-item" href="/category/scented-candles">Scented Candles</a></li>
+            <li><a class="dropdown-item" href="/workshops">Workshops</a></li>
+          </ul>
+        </div>
+        <a href="/cart" class="cart-link d-flex align-items-center gap-2" aria-label="Cart">
+          <span class="cart-icon" aria-hidden="true">🛒</span>
+          <span class="badge bg-dark" id="cart-count-badge">0</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Brand / hero -->
+  <section class="brand-section text-center mt-4">
+    <div class="container">
+      <h1 class="brand-name">shreyadeshani.art</h1>
+      <p class="brand-tagline">NATURE INSPIRED</p>
+    </div>
+  </section>
+
+  <section class="hero-section py-4 py-md-5">
+    <div class="container">
+      <div class="row align-items-center gy-4">
+        <div class="col-md-5 d-flex justify-content-center">
+          <div class="hero-image-wrapper">
+            <img
+            src="/uploads/Snapchat-1073502801.jpg"
+            alt="Artist portrait"
+            class="hero-image"
+          >
+          </div>
+        </div>
+        <div class="col-md-7">
+          <p class="hero-about">
+            Hi, I'm Shreya. My resin and interior creations celebrate nature-inspired beauty and meaningful stories.
+          </p>
+          <p class="hero-lede">
+            From a very young age, art was never just a hobby for me—it was a part of who I am. While others were exploring different paths, I found myself choosing creativity, colors, and expression every single day. What started as a childhood passion slowly became my identity.
+            Although I once stepped into the medical field, life led me back to where my heart truly belongs. Choosing to leave that path was not easy, but it was honest. I chose art—not just as a career, but as a lifelong commitment to what I love the most.
+            Today, as a resin and interior artist, I transform emotions into tangible creations and spaces into meaningful experiences. Every piece I create carries a story, a feeling, and a part of my journey—crafted with intention, passion, and authenticity.
+            For me, art is forever. It is my voice, my purpose, and the path I have chosen with courage and love.
+          </p>
+          <button
+            class="btn btn-outline-dark hero-cta"
+            onclick="document.getElementById('home-categories').scrollIntoView({ behavior: 'smooth' });"
+          >
+            EXPLORE COLLECTIONS
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Product categories only -->
+  <section class="products-section py-5" id="home-categories">
+    <div class="container">
+      <h2 class="section-title mb-4 text-center">Collections</h2>
+      <div class="row g-4 justify-content-center">
+        <!-- Resin Jewellery -->
+        <div class="col-6 col-lg-3">
+          <a href="/category/resin-jewelry" class="text-decoration-none text-reset">
+            <div class="card h-100 shadow-sm product-card">
+              <img src="\uploads\jwellery.jpg"" class="card-img-top" alt="Resin Jewellery" style="height:260px; object-fit:cover;">
+              <div class="card-body text-center">
+                <h6 class="card-title product-name">Resin Jewellery</h6>
+                <p class="card-text small text-muted">
+                  Pendants, bracelets, rings and more – everyday wearable resin pieces.
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Resin Preservation -->
+        <div class="col-6 col-lg-3">
+          <a href="/category/resin-preservation" class="text-decoration-none text-reset">
+            <div class="card h-100 shadow-sm product-card">
+              <img src="\uploads\preservation.jpg"" class="card-img-top" alt="Resin Preservation" style="height:260px; object-fit:cover;">
+              <div class="card-body text-center">
+                <h6 class="card-title product-name">Resin Preservation</h6>
+                <p class="card-text small text-muted">
+                  Preserve flowers and memories forever in clear, glossy resin.
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Interior -->
+        <div class="col-6 col-lg-3">
+          <a href="/category/interior" class="text-decoration-none text-reset">
+            <div class="card h-100 shadow-sm product-card">
+              <img src="\uploads\interior.jpg"" class="card-img-top" alt="Interior" style="height:260px; object-fit:cover;">
+              <div class="card-body text-center">
+                <h6 class="card-title product-name">Interior</h6>
+                <p class="card-text small text-muted">
+                  Coasters, trays, wall art and decor pieces for your space.
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+
+        <!-- Scented Candles -->
+        <div class="col-6 col-lg-3">
+          <a href="/category/scented-candles" class="text-decoration-none text-reset">
+            <div class="card h-100 shadow-sm product-card">
+              <img
+                src="\uploads\candles.jpg"
+                class="card-img-top"
+                alt="Scented Candles"
+                style="height:260px; object-fit:cover;"
+              >
+              <div class="card-body text-center">
+                <h6 class="card-title product-name">Scented Candles</h6>
+                <p class="card-text small text-muted">
+                  Hand-poured candles to warm your space with soft, calming fragrance.
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Workshops — single category-style banner → /workshops -->
+  <section class="workshop-home-section py-5 border-top" id="workshop-section">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+          <a href="/workshops" class="text-decoration-none text-reset workshop-banner-link d-block">
+            <div class="card border-0 shadow-sm product-card workshop-home-banner overflow-hidden h-100">
+              <img
+                src="\uploads\workshop.jpg""
+                class="card-img-top workshop-home-banner__img"
+                alt="Resin workshops"
+              >
+              <div class="card-body text-center py-4 px-3 workshop-home-banner__body">
+                <h2 class="section-title mb-2">Workshops</h2>
+                <p class="text-muted small mb-0 workshop-home-banner__subtitle">
+                  Explore hands-on resin workshops
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>window.WHATSAPP_NUMBER = "<%= whatsappNumber %>";</script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/shop.js"></script>
+</body>
+</html>
