@@ -1,5 +1,6 @@
 const Product = require('../models/Product');
 const Workshop = require('../models/Workshop');
+const cloudinary = require('../config/cloudinary');
 
 // Fixed category definitions
 const FIXED_CATEGORIES = [
@@ -13,6 +14,23 @@ const categoryLabelFromSlug = (slug) => {
   const found = FIXED_CATEGORIES.find((c) => c.slug === slug);
   return found ? found.label : slug || '';
 };
+
+function getUploadedImageData(file) {
+  if (!file) return null;
+  return {
+    imageUrl: file.secure_url || file.path || null,
+    imagePublicId: file.filename || file.public_id || null
+  };
+}
+
+async function removeCloudinaryImage(publicId) {
+  if (!publicId) return;
+  try {
+    await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+  } catch (error) {
+    console.error('Failed to delete old Cloudinary image:', error.message || error);
+  }
+}
 
 function buildWorkshopScheduleAt(dateStr, timeStr) {
   if (!dateStr) return null;
@@ -110,18 +128,15 @@ exports.postProduct = async (req, res) => {
 
     const { name, price, categorySlug, description } = req.body;
 
-    let imageUrl = null;
-
-    if (req.file) {
-      imageUrl = req.file.path;   // Cloudinary URL
-    }
+    const uploaded = getUploadedImageData(req.file);
 
     await Product.create({
       name,
       price,
       categorySlug,
       description,
-      imageUrl
+      imageUrl: uploaded ? uploaded.imageUrl : null,
+      imagePublicId: uploaded ? uploaded.imagePublicId : null
     });
 
     res.redirect('/admin/products');
@@ -155,7 +170,10 @@ exports.updateProduct = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.imageUrl = req.file.path; // Cloudinary
+      const uploaded = getUploadedImageData(req.file);
+      updateData.imageUrl = uploaded ? uploaded.imageUrl : null;
+      updateData.imagePublicId = uploaded ? uploaded.imagePublicId : null;
+      await removeCloudinaryImage(product.imagePublicId);
     }
 
     await Product.findByIdAndUpdate(id, updateData);
@@ -176,7 +194,11 @@ exports.deleteProduct = async (req, res) => {
 
   const { id } = req.params;
 
-  await Product.findByIdAndDelete(id);
+  const product = await Product.findById(id);
+  if (product) {
+    await removeCloudinaryImage(product.imagePublicId);
+    await Product.findByIdAndDelete(id);
+  }
 
   res.redirect('/admin/products');
 
@@ -219,7 +241,7 @@ exports.postWorkshop = async (req, res) => {
       return res.status(400).send('Image is required for a new workshop.');
     }
 
-    const imageUrl = req.file.path;
+    const uploaded = getUploadedImageData(req.file);
 
     const scheduleAt = buildWorkshopScheduleAt(date, time);
 
@@ -230,7 +252,8 @@ exports.postWorkshop = async (req, res) => {
       time: time || '',
       scheduleAt,
       price: Number(price),
-      imageUrl
+      imageUrl: uploaded ? uploaded.imageUrl : null,
+      imagePublicId: uploaded ? uploaded.imagePublicId : null
     });
 
     res.redirect('/admin/workshops');
@@ -266,7 +289,10 @@ exports.updateWorkshop = async (req, res) => {
     };
 
     if (req.file) {
-      updateData.imageUrl = req.file.path;
+      const uploaded = getUploadedImageData(req.file);
+      updateData.imageUrl = uploaded ? uploaded.imageUrl : null;
+      updateData.imagePublicId = uploaded ? uploaded.imagePublicId : null;
+      await removeCloudinaryImage(workshop.imagePublicId);
     }
 
     await Workshop.findByIdAndUpdate(id, updateData);
@@ -287,7 +313,11 @@ exports.deleteWorkshop = async (req, res) => {
 
   const { id } = req.params;
 
-  await Workshop.findByIdAndDelete(id);
+  const workshop = await Workshop.findById(id);
+  if (workshop) {
+    await removeCloudinaryImage(workshop.imagePublicId);
+    await Workshop.findByIdAndDelete(id);
+  }
 
   res.redirect('/admin/workshops');
 

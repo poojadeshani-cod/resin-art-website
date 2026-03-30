@@ -1,3 +1,4 @@
+
 const express = require('express');
 const { ensureAdmin } = require('../middleware/auth');
 const adminController = require('../controllers/adminController');
@@ -8,17 +9,50 @@ const cloudinary = require('../config/cloudinary');
 
 const router = express.Router();
 
+const ALLOWED_IMAGE_MIME_TYPES = [
+  'image/jpeg',
+  'image/png',
+  'image/webp'
+];
 
-// CLOUDINARY STORAGE
+// ---------- CLOUDINARY STORAGE ----------
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
-  params: {
+  params: async (req, file) => ({
     folder: 'resin-shop',
-    allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
+    resource_type: 'image',
+    allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+    public_id: `${Date.now()}-${file.originalname
+      .replace(/\.[^/.]+$/, '')
+      .replace(/[^a-zA-Z0-9-_]/g, '-')
+      .toLowerCase()}`
+  })
+});
+
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024
+  },
+  fileFilter: (req, file, cb) => {
+    if (!ALLOWED_IMAGE_MIME_TYPES.includes(file.mimetype)) {
+      return cb(new Error('Only JPG, PNG, and WEBP images are allowed.'));
+    }
+    cb(null, true);
   }
 });
 
-const upload = multer({ storage });
+const handleUpload = (fieldName) => (req, res, next) => {
+  upload.single(fieldName)(req, res, (error) => {
+    if (!error) return next();
+
+    const message =
+      error && error.message
+        ? error.message
+        : 'Image upload failed. Please try again.';
+    return res.status(400).send(message);
+  });
+};
 
 
 // ---------- AUTH ----------
@@ -39,7 +73,7 @@ router.get('/products/new', ensureAdmin, adminController.getProductForm);
 router.post(
   '/products',
   ensureAdmin,
-  upload.single('image'),
+  handleUpload('image'),
   adminController.postProduct
 );
 
@@ -48,7 +82,7 @@ router.get('/products/edit/:id', ensureAdmin, adminController.getProductForm);
 router.post(
   '/products/edit/:id',
   ensureAdmin,
-  upload.single('image'),
+  handleUpload('image'),
   adminController.updateProduct
 );
 
@@ -67,7 +101,7 @@ router.get('/workshops/new', ensureAdmin, adminController.getWorkshopForm);
 router.post(
   '/workshops',
   ensureAdmin,
-  upload.single('image'),
+  handleUpload('image'),
   adminController.postWorkshop
 );
 
@@ -76,7 +110,7 @@ router.get('/workshops/edit/:id', ensureAdmin, adminController.getWorkshopForm);
 router.post(
   '/workshops/edit/:id',
   ensureAdmin,
-  upload.single('image'),
+  handleUpload('image'),
   adminController.updateWorkshop
 );
 
@@ -88,3 +122,4 @@ router.post(
 
 
 module.exports = router;
+
